@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 数据源管理表
+model DataSource {
+  id                   Int       @id @default(autoincrement())
+  name                 String    @unique
+  type                 String    // 'repository', 'blog', 'paper', 'news'
+  displayName          String
+  baseUrl              String?
+  apiConfig            Json?
+  crawlerConfig        Json?
+  updateFrequencyHours Int       @default(24)
+  isActive             Boolean   @default(true)
+  lastUpdated          DateTime?
+  createdAt            DateTime  @default(now())
+  
+  // 关联关系
+  items        Item[]
+  jobs         ProcessingJob[]
+  
+  @@map("data_sources")
+}
+
+// 项目/内容主表
+model Item {
+  id                Int       @id @default(autoincrement())
+  sourceId          Int
+  externalId        String
+  title             String
+  description       String?
+  url               String
+  authorName        String?
+  authorUrl         String?
+  popularityScore   Int       @default(0)
+  metrics           Json      @default("{}")
+  primaryCategory   String?
+  contentType       String    // 'repository', 'article', 'paper', 'tutorial'
+  publishedAt       DateTime
+  lastUpdated       DateTime  @default(now())
+  trendingDate      DateTime?
+  rawData           Json?
+  processedMetadata Json      @default("{}")
+  createdAt         DateTime  @default(now())
+  
+  // 关联关系
+  source DataSource @relation(fields: [sourceId], references: [id])
+  tags   ItemTag[]
+  
+  // 索引和约束
+  @@unique([sourceId, externalId])
+  @@index([sourceId, trendingDate])
+  @@index([popularityScore])
+  @@index([publishedAt])
+  @@index([primaryCategory])
+  @@map("items")
+}
+
+// 标签体系表
+model Tag {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  category    String   // 'framework', 'application', 'technology', 'industry'
+  parentId    Int?
+  displayName String?
+  description String?
+  color       String   @default("#6B7280")
+  icon        String?
+  sortOrder   Int      @default(0)
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  // 关联关系
+  parent   Tag?      @relation("TagHierarchy", fields: [parentId], references: [id])
+  children Tag[]     @relation("TagHierarchy")
+  items    ItemTag[]
+  
+  @@index([category])
+  @@index([isFeatured])
+  @@map("tags")
+}
+
+// 项目标签关联表
+model ItemTag {
+  id         Int      @id @default(autoincrement())
+  itemId     Int
+  tagId      Int
+  confidence Decimal  @default(1.0) @db.Decimal(3, 2)
+  source     String   @default("manual") // 'auto', 'manual', 'ai'
+  createdAt  DateTime @default(now())
+  
+  // 关联关系
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@unique([itemId, tagId])
+  @@index([itemId])
+  @@index([tagId])
+  @@map("item_tags")
+}
+
+// 任务调度表
+model ProcessingJob {
+  id              Int       @id @default(autoincrement())
+  sourceId        Int
+  jobType         String    // 'fetch', 'classify', 'update_metrics', 'cleanup'
+  status          String    @default("pending") // 'pending', 'running', 'completed', 'failed'
+  priority        Int       @default(0)
+  startedAt       DateTime?
+  completedAt     DateTime?
+  errorMessage    String?
+  retryCount      Int       @default(0)
+  maxRetries      Int       @default(3)
+  itemsProcessed  Int       @default(0)
+  metadata        Json      @default("{}")
+  createdAt       DateTime  @default(now())
+  
+  // 关联关系
+  source DataSource @relation(fields: [sourceId], references: [id])
+  
+  @@index([status])
+  @@index([sourceId, jobType])
+  @@index([createdAt])
+  @@map("processing_jobs")
+}
