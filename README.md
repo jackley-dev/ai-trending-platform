@@ -6,6 +6,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?logo=postgresql)](https://www.postgresql.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-blue?logo=tailwindcss)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel)](https://ai-trending-platform.vercel.app)
+
+🌐 **Live Demo**: [https://ai-trending-platform.vercel.app](https://ai-trending-platform.vercel.app)
 
 ## ✨ 项目特色
 
