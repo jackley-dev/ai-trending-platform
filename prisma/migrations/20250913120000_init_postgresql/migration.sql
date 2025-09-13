@@ -75,15 +75,14 @@ CREATE TABLE "processing_jobs" (
     "sourceId" INTEGER NOT NULL,
     "jobType" TEXT NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'pending',
-    "priority" INTEGER NOT NULL DEFAULT 5,
-    "scheduledAt" TIMESTAMP(3) NOT NULL,
+    "priority" INTEGER NOT NULL DEFAULT 0,
     "startedAt" TIMESTAMP(3),
     "completedAt" TIMESTAMP(3),
-    "config" TEXT NOT NULL DEFAULT '{}',
-    "result" TEXT,
-    "error" TEXT,
+    "errorMessage" TEXT,
     "retryCount" INTEGER NOT NULL DEFAULT 0,
     "maxRetries" INTEGER NOT NULL DEFAULT 3,
+    "itemsProcessed" INTEGER NOT NULL DEFAULT 0,
+    "metadata" TEXT NOT NULL DEFAULT '{}',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "processing_jobs_pkey" PRIMARY KEY ("id")
@@ -129,7 +128,10 @@ CREATE INDEX "processing_jobs_sourceId_idx" ON "processing_jobs"("sourceId");
 CREATE INDEX "processing_jobs_status_idx" ON "processing_jobs"("status");
 
 -- CreateIndex
-CREATE INDEX "processing_jobs_scheduledAt_idx" ON "processing_jobs"("scheduledAt");
+CREATE INDEX "processing_jobs_sourceId_jobType_idx" ON "processing_jobs"("sourceId", "jobType");
+
+-- CreateIndex
+CREATE INDEX "processing_jobs_createdAt_idx" ON "processing_jobs"("createdAt");
 
 -- AddForeignKey
 ALTER TABLE "items" ADD CONSTRAINT "items_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "data_sources"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
