@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "data_sources" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "displayName" TEXT NOT NULL,
@@ -9,13 +9,15 @@ CREATE TABLE "data_sources" (
     "crawlerConfig" TEXT,
     "updateFrequencyHours" INTEGER NOT NULL DEFAULT 24,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "lastUpdated" DATETIME,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "lastUpdated" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "data_sources_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "items" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "sourceId" INTEGER NOT NULL,
     "externalId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -27,18 +29,19 @@ CREATE TABLE "items" (
     "metrics" TEXT NOT NULL DEFAULT '{}',
     "primaryCategory" TEXT,
     "contentType" TEXT NOT NULL,
-    "publishedAt" DATETIME NOT NULL,
-    "lastUpdated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "trendingDate" DATETIME,
+    "publishedAt" TIMESTAMP(3) NOT NULL,
+    "lastUpdated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "trendingDate" TIMESTAMP(3),
     "rawData" TEXT,
     "processedMetadata" TEXT NOT NULL DEFAULT '{}',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "items_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "data_sources" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "items_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "tags" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "category" TEXT NOT NULL,
@@ -49,38 +52,41 @@ CREATE TABLE "tags" (
     "icon" TEXT,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "isFeatured" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "tags_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "tags" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "tags_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "item_tags" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "itemId" INTEGER NOT NULL,
     "tagId" INTEGER NOT NULL,
-    "confidence" REAL NOT NULL DEFAULT 1.0,
+    "confidence" DOUBLE PRECISION NOT NULL DEFAULT 1.0,
     "source" TEXT NOT NULL DEFAULT 'manual',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "item_tags_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "items" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "item_tags_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "tags" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "item_tags_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "processing_jobs" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "sourceId" INTEGER NOT NULL,
     "jobType" TEXT NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'pending',
-    "priority" INTEGER NOT NULL DEFAULT 0,
-    "startedAt" DATETIME,
-    "completedAt" DATETIME,
-    "errorMessage" TEXT,
+    "priority" INTEGER NOT NULL DEFAULT 5,
+    "scheduledAt" TIMESTAMP(3) NOT NULL,
+    "startedAt" TIMESTAMP(3),
+    "completedAt" TIMESTAMP(3),
+    "config" TEXT NOT NULL DEFAULT '{}',
+    "result" TEXT,
+    "error" TEXT,
     "retryCount" INTEGER NOT NULL DEFAULT 0,
     "maxRetries" INTEGER NOT NULL DEFAULT 3,
-    "itemsProcessed" INTEGER NOT NULL DEFAULT 0,
-    "metadata" TEXT NOT NULL DEFAULT '{}',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "processing_jobs_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "data_sources" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "processing_jobs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -114,19 +120,28 @@ CREATE INDEX "tags_category_idx" ON "tags"("category");
 CREATE INDEX "tags_isFeatured_idx" ON "tags"("isFeatured");
 
 -- CreateIndex
-CREATE INDEX "item_tags_itemId_idx" ON "item_tags"("itemId");
-
--- CreateIndex
-CREATE INDEX "item_tags_tagId_idx" ON "item_tags"("tagId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "item_tags_itemId_tagId_key" ON "item_tags"("itemId", "tagId");
+
+-- CreateIndex
+CREATE INDEX "processing_jobs_sourceId_idx" ON "processing_jobs"("sourceId");
 
 -- CreateIndex
 CREATE INDEX "processing_jobs_status_idx" ON "processing_jobs"("status");
 
 -- CreateIndex
-CREATE INDEX "processing_jobs_sourceId_jobType_idx" ON "processing_jobs"("sourceId", "jobType");
+CREATE INDEX "processing_jobs_scheduledAt_idx" ON "processing_jobs"("scheduledAt");
 
--- CreateIndex
-CREATE INDEX "processing_jobs_createdAt_idx" ON "processing_jobs"("createdAt");
+-- AddForeignKey
+ALTER TABLE "items" ADD CONSTRAINT "items_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "data_sources"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tags" ADD CONSTRAINT "tags_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "tags"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "item_tags" ADD CONSTRAINT "item_tags_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "item_tags" ADD CONSTRAINT "item_tags_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "tags"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "processing_jobs" ADD CONSTRAINT "processing_jobs_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "data_sources"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
