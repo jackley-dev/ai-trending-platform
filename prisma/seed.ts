@@ -14,10 +14,10 @@ async function main() {
       type: 'repository',
       displayName: 'GitHub',
       baseUrl: 'https://api.github.com',
-      apiConfig: {
+      apiConfig: JSON.stringify({
         rateLimit: 5000,
         timeout: 30000
-      },
+      }),
       updateFrequencyHours: 24,
       isActive: true
     }

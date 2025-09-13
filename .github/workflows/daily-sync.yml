@@ -1,0 +1,44 @@
+name: Daily Data Sync
+
+on:
+  schedule:
+    # 每天 UTC 时间 02:00 运行 (北京时间上午10点)
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Generate Prisma client
+        run: npx prisma generate
+        
+      - name: Sync trending data
+        run: npm run fetch-data
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Notification on failure
+        if: failure()
+        run: |
+          echo "❌ Daily data sync failed"
+          # 可以在这里添加通知逻辑，如发送邮件或Slack消息
+          
+      - name: Success notification
+        if: success()
+        run: |
+          echo "✅ Daily data sync completed successfully"

@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义滚动条样式 */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-github-dark;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-github-border rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-600;
+  }
+}
+
+/* GitHub trending 样式 */
+@layer components {
+  .trending-item {
+    @apply border border-gray-200 dark:border-github-border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-200;
+  }
+  
+  .trending-item-header {
+    @apply flex items-start justify-between mb-3;
+  }
+  
+  .trending-item-title {
+    @apply text-lg font-semibold text-blue-600 dark:text-github-accent hover:underline;
+  }
+  
+  .trending-item-description {
+    @apply text-gray-700 dark:text-github-muted text-sm mb-3 line-clamp-2;
+  }
+  
+  .trending-item-meta {
+    @apply flex items-center justify-between text-sm text-gray-500 dark:text-github-muted;
+  }
+  
+  .trending-item-stats {
+    @apply flex items-center space-x-4;
+  }
+  
+  .trending-item-stat {
+    @apply flex items-center space-x-1;
+  }
+  
+  .tag {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border;
+  }
+  
+  .tag-framework {
+    @apply bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800;
+  }
+  
+  .tag-application {
+    @apply bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800;
+  }
+  
+  .tag-technology {
+    @apply bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800;
+  }
+  
+  .filter-button {
+    @apply inline-flex items-center px-3 py-2 border border-gray-300 dark:border-github-border text-sm font-medium rounded-md text-gray-700 dark:text-github-text bg-white dark:bg-github-dark hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+  }
+  
+  .filter-button-active {
+    @apply bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400;
+  }
+}
+
+/* 加载动画 */
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* 暗色模式优化 */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}

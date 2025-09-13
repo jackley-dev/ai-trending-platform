@@ -32,10 +32,7 @@ export class TagRepository {
   async findFeatured(): Promise<Tag[]> {
     return await prisma.tag.findMany({
       where: { isFeatured: true },
-      orderBy: [
-        { category: 'asc' },
-        { sortOrder: 'asc' }
-      ]
+      orderBy: { sortOrder: 'asc' }
     }) as Tag[];
   }
 

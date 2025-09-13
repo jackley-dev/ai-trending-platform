@@ -96,8 +96,8 @@ export class GitHubService implements DataSourceAdapter {
 
         allResults.push(...rawItems);
 
-        // 避免API速率限制
-        await this.sleep(1000);
+        // 避免API速率限制 - 搜索API限制更严格
+        await this.sleep(3000);
       } catch (error) {
         console.error(`Failed to fetch with query "${query}":`, error);
       }

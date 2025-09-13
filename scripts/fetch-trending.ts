@@ -65,7 +65,7 @@ class TrendingSyncService {
           jobType: 'fetch',
           status: 'running',
           startedAt: new Date(),
-          metadata: { timespan, dryRun }
+          metadata: JSON.stringify({ timespan, dryRun })
         }
       });
 
@@ -131,11 +131,11 @@ class TrendingSyncService {
             status: 'completed',
             completedAt: new Date(),
             itemsProcessed: processed,
-            metadata: {
+            metadata: JSON.stringify({
               timespan,
               dryRun,
               stats: { fetched, processed, relevant, errors }
-            }
+            })
           }
         });
 
@@ -187,13 +187,13 @@ class TrendingSyncService {
       authorName: standardItem.author.name,
       authorUrl: standardItem.author.url,
       popularityScore: Math.round(this.github.calculatePopularity(standardItem.metrics)),
-      metrics: standardItem.metrics,
+      metrics: JSON.stringify(standardItem.metrics),
       primaryCategory: classification.primaryCategory,
       contentType: 'repository' as const,
       publishedAt: standardItem.publishedAt,
       trendingDate: new Date(),
-      rawData: standardItem,
-      processedMetadata: {
+      rawData: JSON.stringify(standardItem),
+      processedMetadata: JSON.stringify({
         language: standardItem.language,
         license: standardItem.license,
         topics: standardItem.topics,
@@ -202,7 +202,7 @@ class TrendingSyncService {
           relevanceScore: classification.relevanceScore,
           reasoning: classification.reasoning
         }
-      }
+      })
     };
 
     let item;

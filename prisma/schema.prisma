@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -17,8 +17,8 @@ model DataSource {
   type                 String    // 'repository', 'blog', 'paper', 'news'
   displayName          String
   baseUrl              String?
-  apiConfig            Json?
-  crawlerConfig        Json?
+  apiConfig            String?
+  crawlerConfig        String?
   updateFrequencyHours Int       @default(24)
   isActive             Boolean   @default(true)
   lastUpdated          DateTime?
@@ -42,14 +42,14 @@ model Item {
   authorName        String?
   authorUrl         String?
   popularityScore   Int       @default(0)
-  metrics           Json      @default("{}")
+  metrics           String    @default("{}")
   primaryCategory   String?
   contentType       String    // 'repository', 'article', 'paper', 'tutorial'
   publishedAt       DateTime
   lastUpdated       DateTime  @default(now())
   trendingDate      DateTime?
-  rawData           Json?
-  processedMetadata Json      @default("{}")
+  rawData           String?
+  processedMetadata String    @default("{}")
   createdAt         DateTime  @default(now())
   
   // 关联关系
@@ -95,7 +95,7 @@ model ItemTag {
   id         Int      @id @default(autoincrement())
   itemId     Int
   tagId      Int
-  confidence Decimal  @default(1.0) @db.Decimal(3, 2)
+  confidence Float    @default(1.0)
   source     String   @default("manual") // 'auto', 'manual', 'ai'
   createdAt  DateTime @default(now())
   
@@ -122,7 +122,7 @@ model ProcessingJob {
   retryCount      Int       @default(0)
   maxRetries      Int       @default(3)
   itemsProcessed  Int       @default(0)
-  metadata        Json      @default("{}")
+  metadata        String    @default("{}")
   createdAt       DateTime  @default(now())
   
   // 关联关系
