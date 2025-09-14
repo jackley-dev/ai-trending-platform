@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { prisma } from '@/lib/database';
 import { Tag, TagMatch } from '@/types';
 

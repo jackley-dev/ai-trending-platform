@@ -43,7 +43,7 @@ class LimitedFetchService {
       const query = 'langchain OR llamaindex OR autogen stars:>100';
       console.log(`📥 查询: ${query}`);
 
-      const response = await this.github.octokit.rest.search.repos({
+      const response = await (this.github as any).octokit.rest.search.repos({
         q: query,
         sort: 'stars',
         order: 'desc',
@@ -66,7 +66,7 @@ class LimitedFetchService {
             relevant++;
             console.log(`✅ 保存: ${standardItem.title} (${classification.primaryCategory})`);
           } catch (error) {
-            console.error(`❌ 保存失败: ${standardItem.title}`, error.message);
+            console.error(`❌ 保存失败: ${standardItem.title}`, error instanceof Error ? error.message : String(error));
           }
         }
         processed++;

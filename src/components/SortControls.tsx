@@ -29,7 +29,10 @@ export default function SortControls() {
   const currentTimespan = timespanOptions.find(opt => opt.value === timespan);
 
   const handleSortSelect = (option: typeof sortOptions[0]) => {
-    setFilters({ sortBy: option.sortBy, sortOrder: option.sortOrder });
+    setFilters({
+      sortBy: option.sortBy as 'popularity' | 'date' | 'relevance',
+      sortOrder: option.sortOrder as 'asc' | 'desc'
+    });
     setShowSortDropdown(false);
   };
 

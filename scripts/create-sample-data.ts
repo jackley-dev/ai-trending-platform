@@ -178,7 +178,7 @@ async function main() {
     console.log(`✅ 创建项目: ${item.title} (${item.popularityScore} stars)`);
 
     // 为每个项目添加相关标签
-    const tagMappings = {
+    const tagMappings: { [key: string]: string[] } = {
       'langchain-ai/langchain': ['langchain', 'rag'],
       'run-llama/llama_index': ['llamaindex', 'rag', 'vector-database'],
       'microsoft/autogen': ['autogen', 'agent-tools'],

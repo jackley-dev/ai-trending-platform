@@ -213,7 +213,7 @@ export class GitHubService implements DataSourceAdapter {
         owner,
         repo
       });
-      return response.data;
+      return response.data as GitHubRepo;
     } catch (error) {
       console.error(`Failed to get repo details for ${owner}/${repo}:`, error);
       return null;
@@ -327,7 +327,7 @@ export class GitHubService implements DataSourceAdapter {
       }
     }
 
-    return [...new Set(categories)]; // 去重
+    return Array.from(new Set(categories)); // 去重
   }
 
   private deduplicateResults(results: RawItem[]): RawItem[] {

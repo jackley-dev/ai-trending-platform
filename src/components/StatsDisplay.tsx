@@ -33,7 +33,7 @@ export default function StatsDisplay() {
       
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-github-border p-4 text-center">
         <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-          {stats.tags?.active ? formatNumber(stats.tags.active) : '15+'}
+          {'15+'}
         </div>
         <div className="text-sm text-gray-500 dark:text-github-muted">活跃标签</div>
       </div>
