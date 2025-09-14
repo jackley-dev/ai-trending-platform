@@ -107,7 +107,7 @@ jobs:
         run: npm run fetch-data
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           
       # 可选：每天定时同步数据
       # - name: Setup cron for daily sync
