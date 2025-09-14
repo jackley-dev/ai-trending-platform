@@ -5,6 +5,10 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
+// 强制动态渲染
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = {
   title: 'AI Agent & LLM Trending',
   description: '专注AI Agent和LLM领域的GitHub trending发现平台',
