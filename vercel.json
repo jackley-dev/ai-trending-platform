@@ -5,17 +5,7 @@
   "installCommand": "npm ci",
   "devCommand": "npm run dev",
   "env": {
-    "DATABASE_URL": "@database_url",
-    "GITHUB_TOKEN": "@github_token",
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "NEXT_PUBLIC_APP_URL": "https://ai-agent-trending.vercel.app"
-  },
-  "build": {
-    "env": {
-      "DATABASE_URL": "@database_url",
-      "GITHUB_TOKEN": "@github_token",
-      "NEXTAUTH_SECRET": "@nextauth_secret"
-    }
+    "NEXT_PUBLIC_APP_URL": "https://ai-trending-platform.vercel.app"
   },
   "functions": {
     "src/app/api/**": {
