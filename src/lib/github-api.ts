@@ -18,7 +18,8 @@ export class GitHubService implements DataSourceAdapter {
   // 测试连接
   async testConnection(): Promise<boolean> {
     try {
-      await this.octokit.rest.users.getAuthenticated();
+      // 使用更简单的 API 端点测试连接，不需要用户权限
+      await this.octokit.rest.rateLimit.get();
       return true;
     } catch (error) {
       console.error('GitHub API connection failed:', error);

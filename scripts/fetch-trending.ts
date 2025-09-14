@@ -42,7 +42,14 @@ class TrendingSyncService {
     let errors = 0;
 
     try {
-      // 1. 测试GitHub API连接
+      // 1. 测试数据库连接
+      console.log('🔌 测试数据库连接...');
+      await prisma.$connect();
+      await prisma.$queryRaw`SELECT 1`;
+      console.log('✅ 数据库连接成功');
+
+      // 2. 测试GitHub API连接
+      console.log('🔌 测试GitHub API连接...');
       const connected = await this.github.testConnection();
       if (!connected) {
         throw new Error('GitHub API connection failed');
