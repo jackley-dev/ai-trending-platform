@@ -5,6 +5,9 @@ import { TagRepository } from '@/lib/repositories/TagRepository';
 const itemRepo = new ItemRepository();
 const tagRepo = new TagRepository();
 
+// 标记为动态路由，避免静态生成
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // 并行获取统计数据

@@ -4,6 +4,9 @@ import { TrendingFilters } from '@/types';
 
 const itemRepo = new ItemRepository();
 
+// 标记为动态路由，避免静态生成
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

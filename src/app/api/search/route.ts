@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ItemRepository } from '@/lib/repositories/ItemRepository';
 
+// 标记为动态路由，避免静态生成
+export const dynamic = 'force-dynamic';
+
 const itemRepo = new ItemRepository();
 
 export async function GET(request: NextRequest) {
