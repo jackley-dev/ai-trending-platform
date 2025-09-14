@@ -44,8 +44,8 @@ const initialState: TrendingState = {
   filters: {
     tags: [],
     categories: [],
-    timespan: 'daily',
-    sortBy: 'date',
+    timespan: 'monthly',
+    sortBy: 'popularity',
     sortOrder: 'desc',
     limit: 20,
     offset: 0
