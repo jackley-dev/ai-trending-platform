@@ -9,6 +9,16 @@ export default function TrendingList() {
   const { state, setPage } = useTrending();
   const { items, loading, error, filters, pagination } = state;
 
+  // 调试信息 - 追踪状态变化
+  console.log('🐛 TrendingList Debug:', {
+    timestamp: new Date().toISOString(),
+    loading,
+    error,
+    itemsCount: items.length,
+    filters,
+    pagination
+  });
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
