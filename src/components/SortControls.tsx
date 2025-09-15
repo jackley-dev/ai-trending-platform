@@ -23,7 +23,7 @@ export default function SortControls() {
     { value: 'monthly', label: '本月' }
   ];
 
-  const { sortBy = 'popularity', sortOrder = 'desc', timespan = 'monthly' } = state.filters;
+  const { sortBy = 'date', sortOrder = 'desc', timespan = 'monthly' } = state.filters;
   
   const currentSort = sortOptions.find(opt => opt.sortBy === sortBy && opt.sortOrder === sortOrder);
   const currentTimespan = timespanOptions.find(opt => opt.value === timespan);

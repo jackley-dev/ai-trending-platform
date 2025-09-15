@@ -9,15 +9,7 @@ export default function TrendingList() {
   const { state, setPage } = useTrending();
   const { items, loading, error, filters, pagination } = state;
 
-  // 调试信息 - 追踪状态变化
-  console.log('🐛 TrendingList Debug:', {
-    timestamp: new Date().toISOString(),
-    loading,
-    error,
-    itemsCount: items.length,
-    filters,
-    pagination
-  });
+  // 调试信息已移除用于生产环境
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);

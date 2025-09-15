@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       timespan: (searchParams.get('timespan') as 'daily' | 'weekly' | 'monthly') || 'daily',
       minPopularity: parseInt(searchParams.get('minPopularity') || '0'),
       language: searchParams.get('language') || undefined,
-      sortBy: (searchParams.get('sortBy') as 'popularity' | 'date' | 'relevance') || 'popularity',
+      sortBy: (searchParams.get('sortBy') as 'popularity' | 'date' | 'relevance') || 'date',
       sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
       limit: parseInt(searchParams.get('limit') || '50'),
       offset: parseInt(searchParams.get('offset') || '0')

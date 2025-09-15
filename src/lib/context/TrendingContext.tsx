@@ -45,7 +45,7 @@ const initialState: TrendingState = {
     tags: [],
     categories: [],
     timespan: 'monthly',
-    sortBy: 'popularity',
+    sortBy: 'date',
     sortOrder: 'desc',
     limit: 20,
     offset: 0
@@ -67,10 +67,16 @@ function trendingReducer(state: TrendingState, action: TrendingAction): Trending
   switch (action.type) {
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
-    
+
     case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false };
-    
+      // 只有在真的有错误时才设置loading=false，清空错误时保持loading状态
+      const shouldStopLoading = action.payload !== null;
+      return {
+        ...state,
+        error: action.payload,
+        loading: shouldStopLoading ? false : state.loading
+      };
+
     case 'SET_ITEMS':
       return { ...state, items: action.payload, loading: false, error: null };
     
@@ -139,9 +145,8 @@ export function TrendingProvider({ children }: { children: React.ReactNode }) {
 
   // 获取项目数据
   const fetchItems = async () => {
-    console.log('🔄 fetchItems started at:', new Date().toISOString());
     const startTime = Date.now();
-    const MIN_LOADING_TIME = 800; // 最小加载时间800ms，确保skeleton可见
+    const MIN_LOADING_TIME = 1000; // 最小加载时间1秒，确保skeleton可见（生产环境缩短）
 
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
@@ -174,37 +179,31 @@ export function TrendingProvider({ children }: { children: React.ReactNode }) {
       const response = await fetch(`/api/items?${params}`);
       const result = await response.json();
 
-      console.log('📥 API Response:', {
-        timestamp: new Date().toISOString(),
-        success: result.success,
-        itemCount: result.data?.length || 0,
-        error: result.error,
-        pagination: result.pagination
-      });
-
-      // 确保最小加载时间
+      // 等待最小loading时间，然后设置结果
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
 
-      if (remainingTime > 0) {
-        console.log(`⏱️ Waiting ${remainingTime}ms for minimum loading time`);
-        await new Promise(resolve => setTimeout(resolve, remainingTime));
-      }
-
-      if (result.success) {
-        dispatch({ type: 'SET_ITEMS', payload: result.data });
-        dispatch({
-          type: 'SET_PAGINATION',
-          payload: {
-            total: result.pagination.total,
-            hasMore: result.pagination.hasMore
+      // 使用Promise.all同时等待最小时间和处理结果
+      await Promise.all([
+        remainingTime > 0 ? new Promise(resolve => setTimeout(resolve, remainingTime)) : Promise.resolve(),
+        (async () => {
+          if (result.success) {
+            // 延迟设置状态直到最小时间结束
+            await new Promise(resolve => setTimeout(resolve, remainingTime));
+            dispatch({ type: 'SET_ITEMS', payload: result.data });
+            dispatch({
+              type: 'SET_PAGINATION',
+              payload: {
+                total: result.pagination.total,
+                hasMore: result.pagination.hasMore
+              }
+            });
+          } else {
+            await new Promise(resolve => setTimeout(resolve, remainingTime));
+            dispatch({ type: 'SET_ERROR', payload: result.error || 'Failed to load items' });
           }
-        });
-        console.log('✅ Items loaded successfully:', result.data.length);
-      } else {
-        console.log('❌ API Error:', result.error);
-        dispatch({ type: 'SET_ERROR', payload: result.error || 'Failed to load items' });
-      }
+        })()
+      ]);
     } catch (error) {
       // 即使出错也要等待最小时间
       const elapsedTime = Date.now() - startTime;
