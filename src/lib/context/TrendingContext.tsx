@@ -39,7 +39,7 @@ type TrendingAction =
 
 const initialState: TrendingState = {
   items: [],
-  loading: false,
+  loading: true,
   error: null,
   filters: {
     tags: [],
@@ -78,7 +78,8 @@ function trendingReducer(state: TrendingState, action: TrendingAction): Trending
       return {
         ...state,
         filters: { ...state.filters, ...action.payload },
-        pagination: { ...state.pagination, page: 1 } // 重置到第一页
+        pagination: { ...state.pagination, page: 1 }, // 重置到第一页
+        loading: true // 筛选变化时重新进入加载状态
       };
     
     case 'SET_PAGINATION':
@@ -132,6 +133,7 @@ export function TrendingProvider({ children }: { children: React.ReactNode }) {
   };
 
   const setPage = (page: number) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     dispatch({ type: 'SET_PAGINATION', payload: { page } });
   };
 

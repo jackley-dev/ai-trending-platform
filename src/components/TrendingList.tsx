@@ -16,10 +16,12 @@ export default function TrendingList() {
 
   const totalPages = Math.ceil(pagination.total / pagination.limit);
 
-  if (loading && items.length === 0) {
+  // 显示加载状态：初始加载或正在加载更多数据
+  if (loading) {
     return <LoadingSkeleton count={8} />;
   }
 
+  // 显示错误状态：只有在非加载状态下才显示错误
   if (error && items.length === 0) {
     return (
       <div className="text-center py-12">
@@ -35,7 +37,8 @@ export default function TrendingList() {
     );
   }
 
-  if (items.length === 0 && !loading) {
+  // 显示空状态：只有在加载完成且确实无数据时才显示
+  if (items.length === 0 && !loading && !error) {
     return (
       <div className="text-center py-12">
         <div className="text-6xl mb-4">🔍</div>
@@ -43,7 +46,7 @@ export default function TrendingList() {
           未找到相关项目
         </h3>
         <p className="text-gray-600 dark:text-gray-400 mb-4">
-          {filters.tags && filters.tags.length > 0 
+          {filters.tags && filters.tags.length > 0
             ? `没有找到包含标签 "${filters.tags.join(', ')}" 的项目`
             : '当前时间范围内暂无trending项目'
           }
