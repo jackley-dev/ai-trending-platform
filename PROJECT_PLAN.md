@@ -9,7 +9,7 @@
 - **前端**: Next.js 14 + React + TypeScript + Tailwind CSS
 - **后端**: Next.js API Routes + Prisma ORM
 - **数据库**: PostgreSQL (直接使用，不走SQLite过渡)
-- **部署**: Vercel + Supabase (免费层起步，$0成本验证)
+- **部署**: Vercel + Neon (免费层起步，$0成本验证)
 - **定时任务**: GitHub Actions (每日数据更新)
 - **缓存策略**: Next.js内置缓存 + 应用层内存缓存 (暂不用Redis)
 
@@ -142,7 +142,7 @@ CREATE INDEX idx_item_tags_tag ON item_tags(tag_id);
 **第1天**:
 - [ ] Next.js 14项目初始化
 - [ ] TypeScript + Tailwind CSS配置
-- [ ] Supabase PostgreSQL数据库创建
+- [ ] Neon PostgreSQL数据库创建
 
 **第2天**:
 - [ ] Prisma ORM配置

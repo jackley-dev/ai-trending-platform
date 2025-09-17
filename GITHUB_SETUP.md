@@ -40,8 +40,8 @@
    - 格式类似：`postgresql://postgres:password@viaduct.proxy.rlwy.net:12345/railway`
 
 ### 其他免费选项
-- **Neon**: https://neon.tech (PostgreSQL)
-- **Supabase**: https://supabase.com (PostgreSQL)
+- **Neon** (推荐): https://neon.tech (PostgreSQL)
+- **Supabase** (可选): https://supabase.com (PostgreSQL)
 - **PlanetScale**: https://planetscale.com (MySQL)
 
 ## 🔐 第三步：GitHub Token 设置

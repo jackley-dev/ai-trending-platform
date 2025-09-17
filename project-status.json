@@ -19,7 +19,7 @@
       "task": "architecture_design",
       "description": "技术架构设计和技术栈选择",
       "completed_date": "2025-09-11",
-      "details": "确定Next.js + PostgreSQL + Vercel + Supabase技术栈"
+      "details": "确定Next.js + PostgreSQL + Vercel + Neon技术栈"
     },
     {
       "task": "database_schema_design",
@@ -43,7 +43,7 @@
       "task": "cost_analysis",
       "description": "成本分析和部署方案对比",
       "completed_date": "2025-09-11",
-      "details": "对比Vercel+Supabase vs 传统云平台，确定渐进式成本策略"
+      "details": "对比Vercel+Neon vs 传统云平台，确定渐进式成本策略"
     },
     {
       "task": "development_planning",
@@ -214,8 +214,8 @@
       "estimated_time": "15 minutes"
     },
     {
-      "step": "setup_supabase_database", 
-      "description": "创建Supabase项目并获取数据库连接",
+      "step": "setup_neon_database", 
+      "description": "创建Neon项目并获取数据库连接",
       "priority": "high",
       "estimated_time": "20 minutes"
     },
@@ -245,7 +245,7 @@
       "alternatives_considered": ["sqlite", "mongodb"]
     },
     "deployment": {
-      "choice": "vercel_supabase", 
+      "choice": "vercel_neon", 
       "reasoning": "免费层起步，零运维成本，快速验证产品想法",
       "cost_strategy": "渐进式: $0 → $45/月 → 自建服务器"
     },

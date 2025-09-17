@@ -58,16 +58,16 @@ npm run dev
 
 ### Vercel 部署
 
-1. **准备Supabase数据库**
-   - 注册 [Supabase](https://supabase.com)
-   - 创建新项目
-   - 获取PostgreSQL连接字符串
+1. **准备Neon数据库**
+   - 注册 [Neon](https://neon.tech)
+   - 创建新项目与分支
+   - 在 `Connection Details` 中复制 PostgreSQL 连接字符串
 
 2. **配置Vercel**
    - Fork 此项目到GitHub
    - 在 [Vercel](https://vercel.com) 导入项目
    - 配置环境变量：
-     - `DATABASE_URL`: Supabase PostgreSQL URL
+     - `DATABASE_URL`: Neon PostgreSQL URL
      - `GITHUB_TOKEN`: GitHub Personal Access Token
      - `NEXTAUTH_SECRET`: 随机密钥
      - `NEXT_PUBLIC_APP_URL`: Vercel部署URL
@@ -84,7 +84,7 @@ npm run dev
    - `VERCEL_TOKEN`: Vercel API Token
    - `VERCEL_ORG_ID`: Vercel Organization ID
    - `VERCEL_PROJECT_ID`: Vercel Project ID
-   - `DATABASE_URL`: Supabase PostgreSQL URL
+   - `DATABASE_URL`: Neon PostgreSQL URL
    - `GITHUB_TOKEN`: GitHub Token用于数据同步
 
 ### 自定义服务器部署

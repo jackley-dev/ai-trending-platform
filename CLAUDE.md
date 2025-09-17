@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **下一步**: Phase 1 基础架构开发
 
 ### 重要技术决策
-- **技术栈**: Next.js 14 + TypeScript + PostgreSQL + Vercel + Supabase
+- **技术栈**: Next.js 14 + TypeScript + PostgreSQL + Vercel + Neon
 - **数据库**: 直接使用PostgreSQL (跳过SQLite过渡)
 - **数据源**: GitHub REST API + 多关键词搜索策略
 - **缓存**: Next.js内置缓存 + 应用层内存缓存 (暂不用Redis)
@@ -106,7 +106,7 @@ function calculateRelevance(repo: GitHubRepo): number {
 
 ### 部署策略
 - **开发环境**: 本地PostgreSQL + Next.js dev
-- **生产环境**: Vercel + Supabase
+- **生产环境**: Vercel + Neon
 - **自动化**: GitHub Actions每日定时任务
 - **监控**: Vercel Analytics + 自定义错误日志
 

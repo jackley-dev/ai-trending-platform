@@ -37,7 +37,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         
       - name: Sync trending data
-        run: npm run fetch-data
+        run: npm run fetch-data -- --timespan weekly
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

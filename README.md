@@ -95,7 +95,7 @@ NEXTAUTH_SECRET="your_nextauth_secret"
 | **样式方案** | Tailwind CSS 3 | 原子化CSS，快速开发 |
 | **数据库** | PostgreSQL + Prisma | 关系型数据库 + 类型安全ORM |
 | **数据源** | GitHub REST API | 官方API，稳定可靠 |
-| **部署平台** | Vercel + Supabase | Serverless部署，全球CDN |
+| **部署平台** | Vercel + Neon | Serverless部署，全球CDN |
 | **自动化** | GitHub Actions | 定时任务和CI/CD |
 
 ### 系统架构
@@ -177,9 +177,9 @@ POST /api/sync               # 手动触发数据同步
 
 ## 🚀 部署指南
 
-### Vercel + Supabase (推荐)
+### Vercel + Neon (推荐)
 
-1. **创建Supabase项目**
+1. **创建Neon项目**
    ```bash
    # 获取数据库连接字符串
    DATABASE_URL="postgresql://..."
@@ -193,7 +193,7 @@ POST /api/sync               # 手动触发数据同步
 
 3. **配置环境变量**
    - 在Vercel Dashboard中添加环境变量
-   - 包括 `DATABASE_URL`, `GITHUB_TOKEN` 等
+   - 包括 `DATABASE_URL`（Neon连接串）, `GITHUB_TOKEN` 等
 
 4. **设置定时任务**
    - GitHub Actions会自动触发数据更新
